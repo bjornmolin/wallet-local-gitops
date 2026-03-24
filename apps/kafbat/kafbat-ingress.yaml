@@ -1,25 +1,16 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: kafbat-ingress
+  name: kafbat
   namespace: default
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    cert-manager.io/cluster-issuer: mkcert
 spec:
-  ingressClassName: traefik
-  tls:
-    - hosts:
-        - kafbat.dev.local
-      secretName: kafbat-tls
+  parentRefs:
+    - name: dev-local
+      namespace: default
+      sectionName: https
+  hostnames:
+    - kafbat.dev.local
   rules:
-    - host: kafbat.dev.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: kafbat-ui-kafka-ui
-                port:
-                  number: 80
+    - backendRefs:
+        - name: kafbat-ui-kafka-ui
+          port: 80

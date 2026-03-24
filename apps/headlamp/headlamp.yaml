@@ -87,28 +87,19 @@ spec:
       targetPort: 4466
       protocol: TCP
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: headlamp
   namespace: headlamp
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    cert-manager.io/cluster-issuer: mkcert
 spec:
-  ingressClassName: traefik
-  tls:
-    - hosts:
-        - headlamp.dev.local
-      secretName: headlamp-tls
+  parentRefs:
+    - name: dev-local
+      namespace: default
+      sectionName: https
+  hostnames:
+    - headlamp.dev.local
   rules:
-    - host: headlamp.dev.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: headlamp
-                port:
-                  number: 80
+    - backendRefs:
+        - name: headlamp
+          port: 80
