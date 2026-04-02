@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kafka-tls
+spec:
+  secretName: kafka-tls
+  issuerRef:
+    name: mkcert
+    kind: ClusterIssuer
+  dnsNames:
+    - access-kafka-cluster-kafka-bootstrap
+    - access-kafka-cluster-kafka-bootstrap.default.svc
+    - access-kafka-cluster-kafka-bootstrap.default.svc.cluster.local
+    - "*.access-kafka-cluster-kafka-brokers.default.svc.cluster.local"

@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - kafbat-configmap.yaml
   - helmrelease.yaml
-  - kafbat-ingress.yaml
